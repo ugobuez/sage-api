@@ -1,13 +1,29 @@
-const adminMiddleware = (req, res, next) => {
-    // Basic example: check if a request has a custom header "x-admin: true"
-    const isAdmin = req.headers['x-admin'] === 'true';
-  
-    if (!isAdmin) {
-      return res.status(403).json({ error: 'Access denied. Admins only.' });
-    }
-  
-    next();
-  };
-  
-  export default adminMiddleware;
-  
+// middleware/adminMiddleware.js
+
+export const isAdmin = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    return next();
+  }
+  return res.status(403).json({ error: 'Access denied. Admins only.' });
+};
+
+export const isInstructor = (req, res, next) => {
+  if (req.user && req.user.role === 'instructor') {
+    return next();
+  }
+  return res.status(403).json({ error: 'Access denied. Instructors only.' });
+};
+
+export const isStudent = (req, res, next) => {
+  if (req.user && req.user.role === 'student') {
+    return next();
+  }
+  return res.status(403).json({ error: 'Access denied. Students only.' });
+};
+
+export const isInstructorOrAdmin = (req, res, next) => {
+  if (req.user && (req.user.role === 'instructor' || req.user.role === 'admin')) {
+    return next();
+  }
+  return res.status(403).json({ error: 'Access denied. Instructor or Admin only.' });
+};

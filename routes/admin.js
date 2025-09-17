@@ -1,13 +1,13 @@
 // routes/admin.js
 import express from 'express';
-import adminMiddleware from '../middleware/adminMiddleware.js';
+import { isAdmin } from '../middleware/adminMiddleware.js'; // ✅ named import
 import Course from '../model/course.js';
 import { User } from '../model/user.js';
 
 const router = express.Router();
 
 // ✅ GET all users (admin only)
-router.get('/users', adminMiddleware, async (req, res) => {
+router.get('/users', isAdmin, async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -17,7 +17,7 @@ router.get('/users', adminMiddleware, async (req, res) => {
 });
 
 // ✅ UPDATE course (admin only)
-router.put('/courses/:id', adminMiddleware, async (req, res) => {
+router.put('/courses/:id', isAdmin, async (req, res) => {
   try {
     const updatedCourse = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(updatedCourse);
@@ -27,7 +27,7 @@ router.put('/courses/:id', adminMiddleware, async (req, res) => {
 });
 
 // ✅ DELETE course (admin only)
-router.delete('/courses/:id', adminMiddleware, async (req, res) => {
+router.delete('/courses/:id', isAdmin, async (req, res) => {
   try {
     await Course.findByIdAndDelete(req.params.id);
     res.json({ message: 'Course deleted' });

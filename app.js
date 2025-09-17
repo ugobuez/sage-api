@@ -6,22 +6,20 @@ import userRoutes from './routes/users.js';
 import courseRoutes from './routes/course.js';
 import enrollmentRoutes from './routes/enrollment.js';
 import authRoutes from './routes/auth.js';
-
+import categoryRoutes  from './routes/category.js';
 // ✅ New Feature Routes
-
-
 import feedbackRoutes from './routes/feedback.js';
 import adminRoutes from './routes/admin.js';
 import favoriteRoutes from './routes/favorites.js';
 
-
-
-
-
+// ✅ Load environment variables from .env file
 dotenv.config();
 
+// ✅ Log the MONGO_URI to ensure it's being loaded correctly
+console.log("MONGO_URI:", process.env.MONGO_URI);  // Debugging line to check the URI
+
 const app = express();
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGO_URI;
 
 // ✅ Connect MongoDB
 const connectDB = async () => {
@@ -37,7 +35,7 @@ const connectDB = async () => {
     console.log('MongoDB connected successfully');
   } catch (error) {
     console.error('MongoDB connection failed:', error.message);
-    process.exit(1);
+    process.exit(1); // Exit process with failure
   }
 };
 
@@ -55,14 +53,10 @@ app.use('/api/courses', courseRoutes);
 app.use('/api/enrollments', enrollmentRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/favorites', favoriteRoutes);
-
+app.use('/api/categories', categoryRoutes);
 // ✅ Feature Routes
-
-
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/admin', adminRoutes);
-
-
 
 // ✅ Global Error Handler
 app.use((err, req, res, next) => {
