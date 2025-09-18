@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import cors from 'cors';   // ✅ Added
 
 import userRoutes from './routes/users.js';
 import courseRoutes from './routes/course.js';
@@ -25,10 +26,7 @@ const connectDB = async () => {
       console.log('MongoDB is already connected');
       return;
     }
-    await mongoose.connect(MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(MONGODB_URI);
     console.log('✅ MongoDB Atlas connected successfully');
   } catch (error) {
     console.error('❌ MongoDB connection failed:', error.message);
@@ -40,6 +38,13 @@ connectDB();
 
 // ✅ Middleware
 app.use(express.json());
+
+// ✅ Enable CORS for all origins (or restrict to frontend later)
+app.use(cors({
+  origin: '*',   // you can replace '*' with your frontend URL later
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // ✅ Basic API Check
 app.get('/', (req, res) => res.send('SAGE API is running 🚀'));
