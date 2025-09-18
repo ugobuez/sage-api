@@ -5,7 +5,11 @@ import Course from "../model/course.js";
 export const enrollCourse = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const userId = req.user?._id; // use logged-in user
+    const userId = req.user && req.user._id; // ✅ ensure user exists
+
+    if (!userId) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
 
     // 🔍 Validate course existence
     const course = await Course.findById(courseId).populate(
@@ -22,6 +26,7 @@ export const enrollCourse = async (req, res) => {
       return res.status(400).json({ message: "Already enrolled in this course" });
     }
 
+    // ✅ Create enrollment
     const enrollment = await Enrollment.create({
       student: userId,
       course: courseId,
@@ -47,12 +52,17 @@ export const enrollCourse = async (req, res) => {
 // ✅ Get all enrollments for logged-in user
 export const getEnrollments = async (req, res) => {
   try {
-    const userId = req.user?._id;
+    const userId = req.user && req.user._id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
 
     const enrollments = await Enrollment.find({ student: userId })
       .populate({
         path: "course",
-        select: "title slug description price duration specialization deliveryMode",
+        select:
+          "title slug description price duration specialization deliveryMode",
         populate: {
           path: "category",
           select: "name slug description",
