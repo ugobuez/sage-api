@@ -6,17 +6,14 @@ import userRoutes from './routes/users.js';
 import courseRoutes from './routes/course.js';
 import enrollmentRoutes from './routes/enrollment.js';
 import authRoutes from './routes/auth.js';
-import categoryRoutes  from './routes/category.js';
+import categoryRoutes from './routes/category.js';
 // ✅ New Feature Routes
 import feedbackRoutes from './routes/feedback.js';
 import adminRoutes from './routes/admin.js';
 import favoriteRoutes from './routes/favorites.js';
 
-// ✅ Load environment variables from .env file
+// ✅ Load environment variables
 dotenv.config();
-
-// ✅ Log the MONGO_URI to ensure it's being loaded correctly
-console.log("MONGO_URI:", process.env.MONGO_URI);  // Debugging line to check the URI
 
 const app = express();
 const MONGODB_URI = process.env.MONGO_URI;
@@ -32,10 +29,10 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log('MongoDB connected successfully');
+    console.log('✅ MongoDB Atlas connected successfully');
   } catch (error) {
-    console.error('MongoDB connection failed:', error.message);
-    process.exit(1); // Exit process with failure
+    console.error('❌ MongoDB connection failed:', error.message);
+    process.exit(1);
   }
 };
 
@@ -66,4 +63,4 @@ app.use((err, req, res, next) => {
 
 // ✅ Start Server
 const port = process.env.PORT || 3500;
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(port, () => console.log(`🚀 Server running on port ${port}`));
