@@ -1,14 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import cors from 'cors';   // ✅ Added
+import cors from 'cors';
 
 import userRoutes from './routes/users.js';
 import courseRoutes from './routes/course.js';
 import enrollmentRoutes from './routes/enrollment.js';
 import authRoutes from './routes/auth.js';
 import categoryRoutes from './routes/category.js';
-// ✅ New Feature Routes
 import feedbackRoutes from './routes/feedback.js';
 import adminRoutes from './routes/admin.js';
 import favoriteRoutes from './routes/favorites.js';
@@ -39,12 +38,14 @@ connectDB();
 // ✅ Middleware
 app.use(express.json());
 
-// ✅ Enable CORS for all origins (or restrict to frontend later)
-app.use(cors({
-  origin: '*',   // you can replace '*' with your frontend URL later
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// ✅ Enable CORS only for your Render API endpoint
+app.use(
+  cors({
+    origin: "https://sage-api-o3hl.onrender.com",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 // ✅ Basic API Check
 app.get('/', (req, res) => res.send('SAGE API is running 🚀'));
