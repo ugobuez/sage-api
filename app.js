@@ -38,12 +38,24 @@ connectDB();
 // ✅ Middleware
 app.use(express.json());
 
-// ✅ Enable CORS only for your Render API endpoint
+// ✅ Enable CORS for localhost:3000 and production frontend (optional)
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://sage-client.onrender.com" // Replace with your frontend deployment if needed
+];
+
 app.use(
   cors({
-    origin: "https://sage-api-o3hl.onrender.com" || "http://localhost:3000",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('CORS not allowed for this origin'));
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
@@ -57,7 +69,6 @@ app.use('/api/enrollments', enrollmentRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/favorites', favoriteRoutes);
 app.use('/api/categories', categoryRoutes);
-// ✅ Feature Routes
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/admin', adminRoutes);
 
