@@ -41,7 +41,7 @@ app.use(express.json());
 // ✅ Enable CORS only for your Render API endpoint
 app.use(
   cors({
-    origin: "https://sage-api-o3hl.onrender.com",
+    origin: "https://sage-api-o3hl.onrender.com" || "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
