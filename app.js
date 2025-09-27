@@ -38,10 +38,10 @@ connectDB();
 // ✅ Middleware
 app.use(express.json());
 
-// ✅ Enable CORS for localhost:3000 and production frontend (optional)
+// ✅ Enable CORS for localhost:3000 and production frontend 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://sage-client.onrender.com" // Replace with your frontend deployment if needed
+  "https://sage-liart-two.vercel.app" 
 ];
 
 app.use(
